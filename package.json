@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@andste82/openapi2pdf": "^1.0.10"
+  }
+}

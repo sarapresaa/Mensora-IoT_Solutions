@@ -1,0 +1,8 @@
+.env
+/mensora/node_modules/
+/mensora.ui/node_modules/
+
+# Credenciais locais
+.env
+.env.*
+!.env.example
