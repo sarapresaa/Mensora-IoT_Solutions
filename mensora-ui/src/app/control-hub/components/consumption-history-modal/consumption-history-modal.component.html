@@ -1,0 +1,52 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('consumptionHistory') }}</h3>
+        <p class="tutorial-description">Análise dos últimos 3 meses</p>
+      </div>
+      <div>
+        <button class="ghost" type="button" (click)="close.emit()">{{ translate.t('close')}}</button>
+      </div>
+    </div>
+    <div class="tutorial-footer">
+      
+      <!-- Estatísticas -->
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-value">{{ stats.total }}</div>
+          <div class="stat-label">Total (kWh)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ stats.average }}</div>
+          <div class="stat-label">Média (kWh)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ stats.max }}</div>
+          <div class="stat-label">Máximo (kWh)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ stats.min }}</div>
+          <div class="stat-label">Mínimo (kWh)</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de Barras -->
+      <div class="chart-container">
+        <div class="chart-bars">
+          <div *ngFor="let data of chartData" class="bar-wrapper">
+            <div class="bar-column">
+              <div class="bar-value">{{ data.consumption }} kWh</div>
+              <div class="bar" 
+                   [style.height.%]="getBarHeight(data.consumption)"
+                   [style.background-color]="data.color">
+              </div>
+            </div>
+            <div class="bar-label">{{ data.month }}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

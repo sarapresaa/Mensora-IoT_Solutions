@@ -1,0 +1,6 @@
+/* Reutiliza classes globais do control-hub */
+
+.stack {
+  max-height: 200px;
+  overflow-y: auto;
+}

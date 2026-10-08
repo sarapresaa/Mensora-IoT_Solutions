@@ -1,0 +1,69 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="brand-icon" (click)="toggleDarkMode()">⚡</div>
+      <h1>Mensora</h1>
+      <p class="subtitle">{{ translate.t('createNewAccount') }}</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label for="name">{{ translate.t('fullName') }}</label>
+        <input type="text" id="name" [(ngModel)]="name" name="name" [placeholder]="translate.t('yourName')" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email"
+          [placeholder]="translate.t('examplePlaceHolder')" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          [title]="translate.t('validEmail')">
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">{{ translate.t('password') }}</label>
+
+        <div class="password-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password"
+            placeholder="••••••••" required>
+
+          <button type="button" class="toggle-password" (click)="togglePassword()" aria-label="Mostrar/Ocultar senha">
+            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="confirmPassword">{{ translate.t('confirmPassword') }}</label>
+
+        <div class="password-wrapper">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" [(ngModel)]="confirmPassword"
+            name="confirmPassword" placeholder="••••••••" required>
+
+          <button type="button" class="toggle-password" (click)="toggleConfirmPassword()"
+            aria-label="Mostrar/Ocultar senha">
+            <i class="fa-solid" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">{{ translate.t('createAccount') }}</button>
+    </form>
+
+    <div class="login-footer">
+      <p>{{ translate.t('haveAccount') }} <a routerLink="/login">{{ translate.t('getIn') }}</a></p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" [class.show]="showToast" [class.toast-success]="toastType === 'success'"
+    [class.toast-error]="toastType === 'error'" [class.toast-warning]="toastType === 'warning'">
+    <div class="toast-icon">
+      <i class="fa-solid" [ngClass]="{
+        'fa-circle-check': toastType === 'success',
+        'fa-circle-exclamation': toastType === 'error',
+        'fa-triangle-exclamation': toastType === 'warning'
+      }"></i>
+    </div>
+    <span class="toast-message">{{ toastMessage }}</span>
+  </div>
+</div>

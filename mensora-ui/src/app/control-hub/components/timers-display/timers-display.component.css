@@ -1,0 +1,98 @@
+.timers-container {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.timers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .timer-count {
+    background: var(--color-pill-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+  }
+}
+
+.timers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--color-input-bg);
+  border-radius: 6px;
+  gap: 12px;
+
+  .timer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+
+    .timer-name {
+      margin: 0;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .timer-schedule {
+      margin: 0;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .status-badge {
+    min-width: 50px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+
+    &.status-active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    &.status-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  }
+}
+
+:host {
+  --color-card-bg: #ffffff;
+  --color-border: #e5e7eb;
+  --color-text-secondary: #6b7280;
+  --color-pill-bg: #f3f4f6;
+  --color-input-bg: #f9fafb;
+}
+
+:host-context(.darkmode) {
+  --color-card-bg: #1f2937;
+  --color-border: #374151;
+  --color-text-secondary: #9ca3af;
+  --color-pill-bg: #374151;
+  --color-input-bg: #111827;
+}

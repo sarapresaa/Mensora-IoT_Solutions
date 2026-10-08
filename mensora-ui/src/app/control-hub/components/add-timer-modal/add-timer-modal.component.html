@@ -1,0 +1,144 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('addTimer') }}</h3>
+        <p class="tutorial-description">{{ translate.t('addTimerDescription') }}</p>
+      </div>
+    </div>
+
+    <div class="tutorial-footer">
+      <div style="width:100%">
+
+        <!-- Nome -->
+        <label>{{ translate.t('name') }}</label>
+        <input 
+          type="text"
+          style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+          (input)="nameChange.emit($any($event.target).value)"
+        />
+
+        <label>{{ translate.t('targetType') }}</label>
+        <select
+          style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+          [(ngModel)]="selectedType"
+          (change)="onTypeSelect()"
+        >
+          <option value="">{{ translate.t('Select Type') }}</option>
+          <option value="scenario">{{ translate.t('scenario') }}</option>
+          <option value="device">{{ translate.t('device') }}</option>
+        </select>
+
+        <!-- Scenario Select -->
+        <div *ngIf="selectedType === 'scenario'">
+          <label>{{ translate.t('scenario') }}</label>
+          <select
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (change)="onScenarioSelect($event)"
+          >
+            <option value="">{{ translate.t('selectScenario') }}</option>
+            <option *ngFor="let scenario of scenarios" [value]="scenario.id">
+              {{ scenario.name }} (ID: {{ scenario.id }})
+            </option>
+          </select>
+        </div>
+
+        <!-- Device Select -->
+        <div *ngIf="selectedType === 'device'">
+          <label>{{ translate.t('device') }}</label>
+          <select
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (change)="onDeviceSelect($event)"
+          >
+            <option value="">{{ translate.t('selectDevice') }}</option>
+            <option *ngFor="let device of devices" [value]="device.device_id">
+              {{ device.name }} (ID: {{ device.device_id }}, IP: {{ device.ip_address }})
+            </option>
+          </select>
+        </div>
+
+        <label>{{ translate.t('Timer Type') }}</label>
+        <select
+          style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+          [(ngModel)]="selectedTimerType"
+        >
+          <option value="">{{ translate.t('Select Timer Type') }}</option>
+          <option value="start_end">{{ translate.t('Start End') }}</option>
+          <option value="interval">{{ translate.t('Interval') }}</option>
+        </select>
+
+        <!-- Start and End -->
+        <div *ngIf="selectedTimerType === 'start_end'">
+          <label>{{ translate.t('start') }}</label>
+          <input 
+            type="time"
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (input)="startChange.emit($any($event.target).value)"
+          />
+
+          <label>{{ translate.t('end') }}</label>
+          <input 
+            type="time"
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (input)="endChange.emit($any($event.target).value)"
+          />
+        </div>
+
+        <!-- Interval -->
+        <div *ngIf="selectedTimerType === 'interval'">
+          <label>{{ translate.t('interval') }}</label>
+          <input
+            type="number"
+            min="1"
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (input)="intervalValueChange.emit($any($event.target).valueAsNumber)"
+          />
+
+          <label>{{ translate.t('Interval Unit') }}</label>
+          <select
+            style="width:100%;padding:8px;margin:6px 0;border-radius:8px;"
+            (change)="onUnitChange($event)"
+          >
+            <option value="">{{ translate.t('Select Unit') }}</option>
+            <option value="seconds">{{ translate.t('seconds') }}</option>
+            <option value="minutes">{{ translate.t('minutes') }}</option>
+            <option value="hours">{{ translate.t('hours') }}</option>
+          </select>
+        </div>
+
+        <!-- Dias da Semana (apenas no modo avançado) -->
+        <div *ngIf="advanced" style="margin-top:12px;">
+          <label>{{ translate.t('weekdays') }}</label>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;">
+            <label *ngFor="let d of daysOfWeek" style="display:flex;align-items:center;gap:4px;">
+              <input 
+                type="checkbox" 
+                [value]="d.value"
+                [checked]="selectedDays.includes(d.value)"
+                (change)="onDayToggle($event)"
+              />
+              {{ d.label }}
+            </label>
+          </div>
+        </div>
+        <label style="display:flex; align-items:center; gap:6px; color:white; margin-left:4px">
+          <input type="checkbox" (change)="activeChange.emit($any($event.target).checked)" />
+          {{ translate.t('activate') }}?
+        </label>
+
+      </div>
+
+      <!-- Botões -->
+      <div class="tutorial-actions">
+        <button class="ghost" type="button" (click)="close.emit()">
+          {{ translate.t('cancel') }}
+        </button>
+
+        <button class="primary" type="button" (click)="create.emit()">
+          {{ translate.t('create') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

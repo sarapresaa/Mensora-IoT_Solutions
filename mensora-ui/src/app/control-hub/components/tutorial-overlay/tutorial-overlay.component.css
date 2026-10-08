@@ -1,0 +1,65 @@
+.tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--tutorialOverlay-background);
+    z-index: 200;
+}
+
+.tutorial-card {
+    background: var(--tutorialCard-background2);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 24px 80px var(--tutorialCard-boxShadow1);
+}
+
+.tutorial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.tutorial-description {
+    color: var(--tutorialDescription-color);
+    margin-top: 4px;
+}
+
+.dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 16px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--dot-background);
+    transition: width 0.3s ease;
+}
+
+.dot.active {
+    width: 12px;
+    background: var(--dotActive-background);
+}
+
+.dot.passed {
+    background: var(--dotPassed-background);
+} 
+
+.tutorial-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tutorial-actions {
+    display: flex;
+    gap: 8px;
+}

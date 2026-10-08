@@ -1,0 +1,69 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card analysis-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('powerAnalysis') }}</h3>
+        <p class="tutorial-description">Análise detalhada de consumo de energia</p>
+      </div>
+      <div>
+        <button class="ghost" type="button" (click)="close.emit()">{{ translate.t('close')}}</button>
+      </div>
+    </div>
+    
+    <div class="tutorial-footer">
+      <!-- Filtros de período -->
+      
+      
+      <!-- Estatísticas em Tempo Real -->
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-content">
+            <div class="stat-value">{{ stats.current | number:'1.0-2' }} W</div>
+            <div class="stat-label">Atual</div>
+          </div>
+        </div>
+        
+        <div class="stat-box">
+          <div class="stat-content">
+            <div class="stat-value">{{ stats.peak | number:'1.0-2' }} W</div>
+            <div class="stat-label">MÁX.</div>
+          </div>
+        </div>
+        
+        <div class="stat-box">
+          <div class="stat-content">
+            <div class="stat-value">{{ stats.average | number:'1.0-2' }} W</div>
+            <div class="stat-label">Média</div>
+          </div>
+        </div>
+        
+        <div class="stat-box">
+          <div class="stat-content">
+            <div class="stat-value">{{ stats.total | number:'1.0-2' }} kWh</div>
+            <div class="stat-label">Total <br>(Desde o último reset interno)</div>
+          </div>
+        </div>
+      </div>
+      <div class="period-filters" style="display:flex;gap:8px;margin-bottom:12px;align-items:center;">
+        <label style="font-weight:600;margin-right:8px;">Período:</label>
+        <select class="secondary" [value]="period" (change)="onPeriodChange($event)" style="padding:8px 12px;border-radius:8px;">
+          <option value="24h">Últimas 24 Horas</option>
+          <option value="7d">Última semana</option>
+          <option value="30d">Último mês</option>
+          <option value="365d">Último ano</option>
+        </select>
+      </div>
+      <!-- Gráfico de Linhas -->
+      <div class="chart-wrapper">
+        <div class="chart-title">Consumo de Energia por Intervalo de Tempo (kWh)</div>
+        <div class="chart-container">
+          <canvas #chartCanvas></canvas>
+        </div>
+        <div class="chart-hint">
+          Passe o cursor sobre o gráfico para ver detalhes
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">Gestão de Cenários</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAdd.emit()">{{ translate.t('add') }}</button>
+  </div>
+  <div class="stack">
+    <div *ngFor="let scenario of scenarios" class="scenario-container" [ngClass]="scenario.state"
+         (click)="onSelectScenario(scenario.id)"
+         [class.selected]="selectedIds?.has(scenario.id)">
+      <div class="scenario-header">
+        <div style="display:flex;flex-direction:column;">
+          <p class="item-title" style="margin:0">{{ scenario.name }}</p>
+        </div>
+        <span class="pill" [ngClass]="['pill', scenario.state === 'active' ? 'pill-on' : 'pill-off']" (click)="onToggleScenario(scenario); $event.stopPropagation()">
+          {{ translate.t(scenario.state === 'active' ? 'active' : 'inactive') }}
+        </span>
+      </div>
+      <div class="devices-list">
+        <div *ngFor="let device of scenario.devices" class="device-item">
+          <span class="device-name">{{ device.device_name }}</span>
+          <label class="switch">
+            <input type="checkbox" [checked]="device.device_state" (change)="onToggleDevice(scenario, device)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="scenarios.length === 0" class="scenario-container empty-state">
+      <p class="item-title">{{ translate.t('noScenarios') || 'Nenhum cenário disponível' }}</p>
+      <p class="item-subtitle">{{ translate.t('createScenarioToGetStarted') || 'Crie um cenário para começar' }}</p>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="scenarios.length > 0">
+    
+    <button class="secondary" *ngIf="selectedIds && selectedIds.size > 0" type="button" (click)="openRemove.emit()">
+      {{ translate.t('remove') }} {{ selectedIds && selectedIds.size > 1 ? ' (' + selectedIds.size + ')' : '' }}
+    </button>
+  </div>
+</div>

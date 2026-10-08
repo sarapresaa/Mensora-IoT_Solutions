@@ -1,0 +1,18 @@
+<div class="timers-container" *ngIf="timers && timers.length > 0">
+  <div class="timers-header">
+    <h3>⏱️ {{ title }}</h3>
+    <span class="timer-count">{{ timers.length }}</span>
+  </div>
+
+  <div class="timers-list">
+    <div *ngFor="let timer of timers" class="timer-item">
+      <div class="timer-info">
+        <p class="timer-name">{{ getTimerName(timer) }}</p>
+        <p class="timer-schedule">{{ getTimerSchedule(timer) }}</p>
+      </div>
+      <span class="status-badge" [ngClass]="getStatusClass(timer)">
+        {{ isActive(timer) ? 'ON' : 'OFF' }}
+      </span>
+    </div>
+  </div>
+</div>

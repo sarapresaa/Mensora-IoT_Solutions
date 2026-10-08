@@ -1,0 +1,58 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('automationIfttt') }}</h3>
+        <p class="tutorial-description">{{ translate.t('manageAutomations') }}</p>
+      </div>
+      <div>
+        <button class="ghost" type="button" (click)="close.emit()">{{ translate.t('close') }}</button>
+      </div>
+    </div>
+    <div class="tutorial-footer">
+      <div *ngIf="showList" style="width:100%;max-height:300px;overflow:auto">
+        <div *ngFor="let a of automations" style="padding:8px;">
+          <strong>{{ a.automation_name }}</strong><br>
+          {{ a.start_time }} → {{ a.end_time }} <br>
+          {{ translate.t('interval') }}: {{ a.interval_value }} {{ a.interval_unit }} <br>
+          {{ translate.t('state') }} <span [style.color]="a.active ? '#4caf50' : '#f44336'">
+            {{ a.active ? translate.t('active') : translate.t('inactive') }}
+          </span>
+        </div>
+        <div *ngIf="automations.length === 0" style="padding:8px">{{ translate.t('noAutomation')}}</div>
+      </div>
+      <div class="tutorial-actions" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+        <input type="text" placeholder="Nome" style="flex:1; padding:8px; border-radius:8px;"
+          (input)="nameChange.emit($any($event.target).value)" />
+        <input type="time" (input)="startChange.emit($any($event.target).value)" />
+        <input type="time" (input)="endChange.emit($any($event.target).value)" />
+        <input type="number" min="1" placeholder="Intervalo" style="width:90px"
+          (input)="intervalValueChange.emit($any($event.target).valueAsNumber)">
+        <select style="padding:6px; border-radius:6px;" (change)="onUnitChange($event)">
+          <option value="" disabled selected>Unidade</option>
+          <option value="seconds">{{ translate.t('seconds') }}</option>
+          <option value="minutes">{{ translate.t('minutes') }}</option>
+          <option value="hours">{{ translate.t('hours') }}</option>
+        </select>
+        <div class="weekdays" style="width:100%; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+          <label *ngFor="let d of daysOfWeek" style="display:flex; align-items:center; gap:4px; color:white;">
+            <input type="checkbox" [value]="d.value" (change)="onDayToggle($event)" />
+            {{ d.label }}
+          </label>
+        </div>
+        <input type="number" placeholder="Trigger" min="0" step="0.01" style="width:120px"
+          (input)="triggerChange.emit($any($event.target).valueAsNumber)" />
+        <select style="padding:6px; border-radius:6px;" (change)="actionChange.emit($any($event.target).value)">
+          <option value="" disabled selected>Ação</option>
+          <option value="ON">ON</option>
+          <option value="OFF">OFF</option>
+        </select>
+        <label style="display:flex; align-items:center; gap:6px; color:white; margin-left:4px">
+          <input type="checkbox" (change)="activeChange.emit($any($event.target).checked)" />
+          {{ translate.t('activate') }}?
+        </label>
+        <button class="primary" type="button" (click)="create.emit()">{{ translate.t('create') }}</button>
+      </div>
+    </div>
+  </div>
+</div>

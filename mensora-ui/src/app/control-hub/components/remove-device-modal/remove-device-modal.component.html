@@ -1,0 +1,19 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('removeDevices')}}</h3>
+        <p class="tutorial-description">
+          {{ translate.t('okRemove')}} 
+          {{ count > 1 ? translate.t('these') + count + ' ' + translate.t('devices')  : translate.t('thisDevice') }}?
+        </p>
+      </div>
+    </div>
+    <div class="tutorial-footer">
+      <div class="tutorial-actions">
+        <button class="ghost" type="button" (click)="close.emit()">{{ translate.t('cancel') }}</button>
+        <button class="primary" type="button" (click)="confirm.emit()">{{ translate.t('remove')}}</button>
+      </div>
+    </div>
+  </div>
+</div>

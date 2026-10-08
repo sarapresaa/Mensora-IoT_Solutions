@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">{{ translate.t('automations') }}</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAddTimer.emit()">{{ translate.t('createTimer') }}</button>
+  </div>
+  <div class="stack">
+    <div *ngFor="let timer of timers" class="stack-item"
+         (click)="timer.id && selectTimer.emit(timer.id)"
+         [class.selected]="timer.id && selectedTimerIds?.has(timer.id)">
+      <div>
+        <p class="item-title">{{ timer.name }}</p>
+        <p class="item-subtitle">{{ timer.schedule }}</p>
+      </div>
+      <span class="pill" [ngClass]="{ 'pill-on': timer.status === translate.t('active'), 'pill-off': timer.status === translate.t('inactive') }">{{ timer.status }}</span>
+    </div>
+    <div *ngIf="timers.length === 0 && automations.length === 0" class="stack-item">{{ translate.t('noTimersOrAutomations') || 'Nenhuma automação disponível' }}</div>
+  </div>
+  <div class="stack" *ngIf="automations.length > 0">
+    <div *ngFor="let a of automations" class="stack-item"
+         (click)="selectAutomation.emit(a.automation_id)"
+         [class.selected]="selectedAutomationIds?.has(a.automation_id)">
+      <div>
+        <p class="item-title">{{ a.automation_name || translate.t('automation') }}</p>
+        <p class="item-subtitle">{{ a.start_time || '-' }} → {{ a.end_time || '-' }}</p>
+        <p class="item-repetition" *ngIf="getRepetitionInfo(a)">{{ getRepetitionInfo(a) }}</p>
+      </div>
+      <span class="pill" [ngClass]="{ 'pill-on': a.active, 'pill-off': !a.active }"
+      (click)="toggleAutomation.emit({ id: a.automation_id, active: !a.active }); $event.stopPropagation()">{{ a.active ? translate.t('active') : translate.t('inactive') }}</span>
+    </div>
+  </div>
+  <div class="card-footer" *ngIf="timers.length > 0 || automations.length > 0">
+    <button class="secondary" *ngIf="(selectedTimerIds && selectedTimerIds.size > 0) || (selectedAutomationIds && selectedAutomationIds.size > 0)" type="button" (click)="openRemove.emit()">
+      {{ translate.t('remove') }} {{ ((selectedTimerIds?.size || 0) + (selectedAutomationIds?.size || 0)) > 1 ? ' (' + ((selectedTimerIds?.size || 0) + (selectedAutomationIds?.size || 0)) + ')' : '' }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="card span-2">
+  <div class="card-header">
+    <div>
+      <p class="eyebrow">{{ translate.t('systemControl')}}</p>
+      <h2>{{ translate.t('onOffSystem')}}</h2>
+    </div>
+    <div class="toggle" [ngClass]="{ 'on': systemOn }" role="button" tabindex="0" (click)="toggle.emit()" (keydown.enter)="toggle.emit()">
+      <span class="toggle-handle" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="status-row">
+    <div class="status-dot" [ngClass]="{ 'on': systemOn }"></div>
+    <span class="status-label">{{ translate.t('systemState')}}</span>
+    <span class="status-value" [ngClass]="{ 'on': systemOn }">{{ systemOn ? translate.t('turnedOn') : translate.t('turnedOff') }}</span>
+  </div>
+</div>

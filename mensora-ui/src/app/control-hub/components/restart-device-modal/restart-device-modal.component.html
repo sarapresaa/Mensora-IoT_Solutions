@@ -1,0 +1,37 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('restartRequired') }}</h3>
+        <p class="tutorial-description">
+          {{ translate.t('restartToApplyEnergyMode') }}
+          <strong>
+            {{ targetMode === 'saving' ? translate.t('saving') : translate.t('balanced') }}
+          </strong>
+          .
+        </p>
+        <p class="tutorial-description" *ngIf="count > 0">
+          {{ count === 1 ? translate.t('thisDevices') : translate.t('these') + ' ' + count + ' ' + translate.t('devices') }}:
+          <span *ngIf="ips?.length">{{ ips.join(', ') }}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="tutorial-footer">
+      <div class="tutorial-actions">
+        <button class="ghost" type="button" [disabled]="busy" (click)="cancel.emit()">
+          {{ translate.t('cancel') }}
+        </button>
+
+        <button
+          type="button"
+          [disabled]="busy"
+          (click)="confirm.emit()"
+          style="background-color:#2563eb !important;color:white !important;border:1px solid #2563eb !important;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:600;box-shadow:0 10px 30px rgba(0, 0, 0, 0.35);"
+        >
+          {{ busy ? translate.t('restarting') : translate.t('restartNow') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

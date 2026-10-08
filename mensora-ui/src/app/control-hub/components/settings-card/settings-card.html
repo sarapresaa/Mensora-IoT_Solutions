@@ -1,0 +1,125 @@
+<ng-container *ngIf="open">
+  <div class="tutorial-overlay">
+    <div class="tutorial-card">
+      <div class="tutorial-header modal-header-with-close">
+        <div>
+          <h3>{{ translate.t('settings') }}</h3>
+          <p class="tutorial-description">{{ translate.t('settingsDescription') }}</p>
+        </div>
+      </div>
+
+      <form class="login-form" (ngSubmit)="onSave()">
+        <div class="form-group">
+          <label for="name">{{ translate.t('fullName') }}</label>
+          <input type="text" id="name" name="name" [(ngModel)]="name" [placeholder]="translate.t('yourName')" [disabled]="loadingUser" />
+        </div>
+
+        <div class="form-group password-group">
+          <label for="currentPassword">
+            {{ translate.t('currentPassword') }}
+            <i *ngIf="isCurrentPasswordValid" class="fa-solid fa-circle-check" style="color: #22c55e; margin-left: 8px;"></i>
+            <i *ngIf="isCurrentPasswordInvalid" class="fa-solid fa-circle-xmark" style="color: #dc2626; margin-left: 8px;"></i>
+          </label>
+
+          <div class="password-verify-wrapper">
+            <div class="password-wrapper" [class.password-valid]="isCurrentPasswordValid" [class.password-invalid]="isCurrentPasswordInvalid">
+              <input
+                [type]="showCurrentPassword ? 'text' : 'password'"
+                id="currentPassword"
+                [(ngModel)]="currentPassword"
+                (ngModelChange)="onCurrentPasswordChange()"
+                (blur)="verifyCurrentPassword()"
+                name="currentPassword"
+                placeholder="••••••••">
+
+              <button type="button" class="toggle-password" (click)="toggleCurrentPassword()" [attr.aria-label]="translate.t('showHidePassword')">
+                <i class="fa-solid" [ngClass]="showCurrentPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group password-group">
+          <label for="password">{{ translate.t('newPassword') }}</label>
+
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="••••••••"
+              [disabled]="!isCurrentPasswordValid">
+
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePassword()"
+              [disabled]="!isCurrentPasswordValid"
+              [attr.aria-label]="translate.t('showHidePassword')">
+              <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group password-group">
+          <label for="confirmPassword">{{ translate.t('confirmNewPassword') }}</label>
+
+          <div class="password-wrapper">
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              id="confirmPassword"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+              placeholder="••••••••"
+              [disabled]="!isCurrentPasswordValid">
+
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="toggleConfirmPassword()"
+              [disabled]="!isCurrentPasswordValid"
+              [attr.aria-label]="translate.t('showHidePassword')">
+              <i class="fa-solid" [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="tutorial-actions" style="margin-top: 24px;">
+          <button class="ghost" type="button" (click)="onCancel()">{{ translate.t('cancel') }}</button>
+          <button class="primary" type="submit">{{ translate.t('save') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="showConfirmModal" class="tutorial-overlay" style="z-index: 9998;">
+    <div class="tutorial-card small">
+      <div class="tutorial-header">
+        <div>
+          <h3>{{ translate.t('confirmPasswordChange') }}</h3>
+          <p class="tutorial-description">
+            {{ translate.t('confirmPasswordChangeDescription') }}
+          </p>
+        </div>
+      </div>
+
+      <div class="tutorial-actions" style="margin-top: 24px;">
+        <button class="ghost" type="button" (click)="cancelPasswordChange()">{{ translate.t('cancel') }}</button>
+        <button class="danger" type="button" (click)="confirmPasswordChange()">{{ translate.t('confirmChange') }}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" [class.show]="showToast" [class.toast-success]="toastType === 'success'"
+    [class.toast-error]="toastType === 'error'" [class.toast-warning]="toastType === 'warning'">
+    <div class="toast-icon">
+      <i class="fa-solid" [ngClass]="{
+        'fa-circle-check': toastType === 'success',
+        'fa-circle-exclamation': toastType === 'error',
+        'fa-triangle-exclamation': toastType === 'warning'
+      }"></i>
+    </div>
+    <span class="toast-message">{{ toastMessage }}</span>
+  </div>
+</ng-container>

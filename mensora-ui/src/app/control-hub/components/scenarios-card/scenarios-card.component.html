@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">{{ translate.t('scenarioManagement')}}</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAdd.emit()">{{ translate.t('add') }}</button>
+  </div>
+  <div class="stack">
+    <div
+      *ngFor="let scenario of scenarios"
+      class="stack-item"
+      (click)="selectScenario.emit(scenario.name)"
+      [ngClass]="{ 'selected': selectedNames?.has(scenario.name) }"
+    >
+      <div style="display:flex;flex-direction:column;">
+        <p class="item-title" style="margin:0">{{ scenario.name }}</p>
+        <p class="item-subtitle" style="margin:0">{{ scenario.devices }}</p>
+      </div>
+      <span class="pill" [ngClass]="['pill', scenario.state === 'active' ? 'pill-on' : 'pill-off']" (click)="$event.stopPropagation(); toggleState.emit(scenario)">{{ translate.t(scenario.state) }}</span>
+    </div>
+  </div>
+  <div class="card-footer">
+    
+    <button class="secondary" *ngIf="selectedNames && selectedNames.size > 0" type="button" (click)="openRemove.emit()">
+      {{ translate.t('remove') }} {{ selectedNames && selectedNames.size > 1 ? ' (' + selectedNames.size + ')' : '' }}
+    </button>
+  </div>
+</div>

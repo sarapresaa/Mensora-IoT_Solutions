@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">Automações</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAddTimer.emit()">{{ translate.t('createTimer') }}</button>
+  </div>
+  <div class="stack">
+    <div *ngFor="let timer of timers" class="stack-item">
+      <div>
+        <p class="item-title">{{ timer.label }}</p>
+        <p class="item-subtitle">{{ timer.window }}</p>
+      </div>
+      <span class="pill" [ngClass]="{ 'pill-on': timer.active === true, 'pill-off': timer.active === false }">{{ timer.active }}</span>
+    </div>
+    <div *ngIf="timers.length === 0 && automations.length === 0" class="stack-item">{{ translate.t('noTimersOrAutomations') }}</div>
+  </div>
+  <div class="stack" *ngIf="automations.length > 0">
+    <div *ngFor="let a of automations" class="stack-item">
+      <div>
+        <p class="item-title">{{ a.automation_name || translate.t('automation') }}</p>
+        <p class="item-subtitle">{{ a.start_time || '-' }} → {{ a.end_time || '-' }}</p>
+      </div>
+      <span class="pill" [ngClass]="{ 'pill-on': a.active, 'pill-off': !a.active }" 
+      (click)="toggleAutomation.emit({ id: a.automation_id, active: !a.active })">{{ a.active ? translate.t('active') : translate.t('inactive') }}</span>
+    </div>
+  </div>
+</div>

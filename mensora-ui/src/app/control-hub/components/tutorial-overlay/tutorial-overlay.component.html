@@ -1,0 +1,24 @@
+<div *ngIf="open" class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t(currentStep?.key + 'Title') }}</h3>
+        <p class="tutorial-description">{{ translate.t(currentStep?.key) }}</p>
+      </div>
+      <div>
+        <button class="ghost" type="button" (click)="close.emit()">X</button>
+      </div>
+    </div>
+
+    <div class="dots" aria-hidden="true">
+      <span *ngFor="let _ of steps; let i = index" class="dot" [ngClass]="{ 'active': i === stepIndex, 'passed': i < stepIndex }"></span>
+    </div>
+
+    <div class="tutorial-footer">
+      <div class="tutorial-actions">
+        <button *ngIf="stepIndex > 0" class="ghost" type="button" (click)="prev.emit()">{{ translate.t('previous') }}</button>
+        <button *ngIf="stepIndex < steps.length - 1" class="primary" type="button" (click)="next.emit()">{{ translate.t('next') }}</button>
+      </div>
+    </div>
+  </div>
+</div>

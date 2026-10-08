@@ -1,0 +1,114 @@
+/* Energy Control Card Styles */
+
+/* Light Mode Colors */
+.toggle-button {
+  background: linear-gradient(135deg, #3b8dff, #3675ff) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(59, 141, 255, 0.3);
+}
+
+.toggle-button:hover {
+  background: linear-gradient(135deg, #2d6eff, #2563eb) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 141, 255, 0.4);
+}
+
+.toggle-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(59, 141, 255, 0.3);
+}
+
+.toggle-button:disabled,
+.toggle-button.disabled {
+  background: #9ca3af !important;
+  color: #6b7280 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.current-mode-indicator {
+  /* Remove background */
+  background: transparent;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  text-align: center;
+  /* Border will be added dynamically based on mode */
+}
+
+.status-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-text strong {
+  font-weight: 600;
+}
+
+/* Normal mode - Blue border and text for light mode */
+.current-mode-indicator.normal-mode {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.current-mode-indicator.normal-mode .status-text strong {
+  color: #3b82f6;
+}
+
+/* Saving mode - Green neon border and text */
+.current-mode-indicator.saving-mode {
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.current-mode-indicator.saving-mode .status-text strong {
+  color: #00ff00;
+}
+
+/* Dark Mode Colors */
+body.darkmode .toggle-button {
+  background: linear-gradient(135deg, #3b8dff, #3675ff) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(59, 141, 255, 0.4);
+}
+
+body.darkmode .toggle-button:hover {
+  background: linear-gradient(135deg, #2d6eff, #2563eb) !important;
+  box-shadow: 0 6px 20px rgba(59, 141, 255, 0.5);
+}
+
+body.darkmode .toggle-button:active {
+  box-shadow: 0 2px 8px rgba(59, 141, 255, 0.4);
+}
+
+body.darkmode .toggle-button:disabled,
+body.darkmode .toggle-button.disabled {
+  background: #4b5563 !important;
+  color: #9ca3af !important;
+}
+
+body.darkmode .current-mode-indicator {
+  /* No background in dark mode either */
+}
+
+body.darkmode .status-text {
+  color: #f1f5f9;
+}
+
+/* Dark mode neon colors - normal mode stays blue in both modes */
+body.darkmode .current-mode-indicator.normal-mode .status-text strong {
+  color: #3b82f6;
+}
+
+body.darkmode .current-mode-indicator.normal-mode {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}

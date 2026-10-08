@@ -1,0 +1,6 @@
+@import '../tutorial-overlay/tutorial-overlay.component.css';
+
+.tutorial-card {
+  max-height: 90vh;
+  overflow-y: auto;
+}

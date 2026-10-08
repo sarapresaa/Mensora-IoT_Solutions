@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">{{ translate.t('powerAnalysis') }}</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAnalysis.emit()">{{ translate.t('detailedAnalysis') }}</button>
+  </div>
+
+  <!-- Estatísticas em Tempo Real (caixas estilizadas) -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.current | number:'1.0-2' }} W</div>
+        <div class="stat-label">Atual</div>
+      </div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.peak | number:'1.0-2' }} W</div>
+        <div class="stat-label">MÁX.</div>
+      </div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.average | number:'1.0-2' }} W</div>
+        <div class="stat-label">Média</div>
+      </div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-content">
+        <div class="stat-value">{{ stats.total | number:'1.0-2' }} kWh</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+  </div>
+</div>

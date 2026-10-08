@@ -1,0 +1,189 @@
+<div class="page">
+  <header class="header">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <h1>Mensora</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="mode-switch">
+        <button *ngFor="let option of modes" type="button" class="chip"
+          [ngClass]="{ 'chip-active': mode() === option.key }" (click)="toggleMode(option.key)">
+
+          {{ translate.t(option.key) }}
+
+        </button>
+      </div>
+
+      <button class="icon-btn theme-btn" (click)="toggleLanguage()">
+        <span *ngIf="isEnglish(); else Portugues"><span>🇬🇧</span></span>
+        <ng-template #Portugues><span>🇵🇹</span></ng-template>
+      </button>
+
+      <button class="icon-btn theme-btn" (click)="toggleDarkMode()">
+        <span *ngIf="isDarkMode() else lightMode">☽</span>
+        <ng-template #lightMode>☼</ng-template>
+      </button>
+
+      <button class="icon-btn theme-btn" type="button" (click)="openSettings()">🔧</button>
+
+      <button class="icon-btn" type="button" (click)="openTutorial()">Tutorial</button>
+    </div>
+  </header>
+
+  <div *ngIf="loggedIn; else loginRedirect">
+    <div class="welcome-section">
+      <h2 class="welcome-text">{{ translate.t('welcome') }}, <span class="user-email">{{ currentUser?.username }}</span>
+      </h2>
+      <button class="logout-btn" (click)="logout()">
+        <span class="logout-icon">⏻</span> LOGOUT
+      </button>
+    </div>
+
+    <!-- Mensagem de erro quando o backend não está disponível -->
+    <div *ngIf="backendError()" class="backend-error">
+      ⚠️ {{ backendError() }}
+    </div>
+
+    <section *ngIf="mode() === 'basic'" class="grid">
+
+      <app-system-control-card [systemOn]="systemOn()" (toggle)="toggleSystem()"></app-system-control-card>
+
+      <app-energy-control-card [energyModes]="energyModes" [selectedEnergyMode]="selectedEnergyMode()" [devices]="hubDevices()"
+        (selectEnergyMode)="selectEnergyMode($event)" (openHistory)="openViewHistory()"></app-energy-control-card>
+
+      <app-devices-card [devices]="basicDevices" [selectedIds]="selectedDeviceIds()"
+        (toggleDevice)="toggleDeviceState($event)" (selectDevice)="selectDevice($event)" (openAdd)="openAddDevice()"
+        (openRemove)="openRemoveDevice()" (openEdit)="openEditForSelected()"></app-devices-card>
+      
+
+      <div>
+        <app-scenarios-card [scenarios]="scenarios" [selectedNames]="selectedScenarioNames()"
+          (selectScenario)="selectScenario($event)" (openAdd)="openAddScenario()" (openRemove)="openRemoveScenario()"
+          (toggleState)="toggleScenarioState($event)"></app-scenarios-card>
+        <br>
+        <app-basic-timers-card [timers]="basicTimers" [automations]="automations()" (openAddTimer)="openBasicTimer()" (toggleAutomation)="onAutomationToggle($event)"></app-basic-timers-card> 
+      </div>
+
+      
+
+      
+
+      <app-timers-display [timers]="hubTimers()" [title]="translate.t('existingTimers') || 'Timers'"></app-timers-display>
+
+      <!-- modal para editar dispositivo -->
+      <app-edit-device-modal [open]="editOpen()" [name]="editName()" [description]="editDescription()" [ip]="editIp()"
+        [deviceType]="editDeviceType()"
+        (close)="closeEdit()" (nameChange)="editName.set($event)" (descriptionChange)="editDescription.set($event)"
+        (save)="saveEdit()"></app-edit-device-modal>
+    </section>
+
+    <section *ngIf="mode() === 'advanced'" class="grid">
+      
+
+      <app-advanced-scenarios-management-card [scenarios]="scenariosForDetails()"
+        [selectedIds]="selectedAdvancedScenarioIds()"
+        (toggleScenarioState)="onAdvancedScenarioToggle($event)"
+        (toggleDeviceState)="onAdvancedDeviceToggle($event)"
+        (selectScenario)="onAdvancedScenarioSelect($event)"
+        (openAdd)="openAddScenario()" (openRemove)="openRemoveAdvancedScenario()"></app-advanced-scenarios-management-card>
+
+      <app-advanced-energy-card [history]="consumptionHistory()" (openAnalysis)="openAdvancedAnalysis()"></app-advanced-energy-card>
+
+      <app-advanced-devices-card [devices]="availableDevices()" [selectedIds]="selectedDeviceIds()"
+        (toggleDevice)="toggleDeviceState($event)" (selectDevice)="selectDevice($event)" (openAdd)="openAddDevice()"
+        (openRemove)="openRemoveDevice()" (openEdit)="openEditForSelected()"></app-advanced-devices-card>
+
+      <app-advanced-timers-card [timers]="advancedTimers" [automations]="automations()" 
+        [selectedTimerIds]="selectedAdvancedTimerIds()" [selectedAutomationIds]="selectedAdvancedAutomationIds()"
+        (openAddTimer)="openAdvancedTimer()" (toggleAutomation)="onAutomationToggle($event)"
+        (selectTimer)="onAdvancedTimerSelect($event)" (selectAutomation)="onAdvancedAutomationSelect($event)"
+        (openRemove)="openRemoveAdvancedAutomation()"></app-advanced-timers-card>
+
+      <app-timers-display [timers]="hubTimers()" [title]="translate.t('existingTimers') || 'Timers'"></app-timers-display>
+
+    </section>
+
+    <!-- Tutorial overlay (componente filho) -->
+    <app-tutorial-overlay [open]="tutorialOpen()" [currentStep]="currentTutorialStep()" [steps]="currentTutorialSteps()"
+      [stepIndex]="tutorialStep()" (close)="closeTutorial()" (next)="nextTutorialStep()"
+      (prev)="prevTutorialStep()"></app-tutorial-overlay>
+
+    <!-- Add Device overlay (componente filho) -->
+    <app-add-device-modal [open]="addDeviceOpen()" [newDeviceName]="newDeviceName()"
+      [newDeviceStatus]="newDeviceStatus()" [newDeviceIp]="newDeviceIp()" [discoveredDevices]="discoveredDevices()"
+      [addDeviceError]="addDeviceError()" [deviceCheckStatus]="deviceCheckStatus()" (close)="closeAddDevice()"
+      (newDeviceNameChange)="setNewDeviceName($event)" (newDeviceStatusChange)="setNewDeviceStatus($event)"
+      (newDeviceIpChange)="setNewDeviceIp($event)" (addDevice)="addDevice()"
+      (addDiscoveredDevice)="addDiscoveredDevice($event)" (testShelly)="testShelly($event)"
+      ></app-add-device-modal>
+
+    <!-- Remove Device confirmation modal (componente filho) -->
+    <app-remove-device-modal [open]="removeDeviceOpen()" [count]="selectedDeviceIds().size"
+      (close)="closeRemoveDevice()" (confirm)="confirmRemoveDevice()"></app-remove-device-modal>
+
+    <!-- Add Timer modal (componente filho) -->
+    <app-add-timer-modal [open]="addTimerOpen()" [scenarios]="scenarios"
+      [devices]="modalAdvanced() ? advancedDevices : basicDevices" [advanced]="modalAdvanced()"
+      (close)="closeAddTimer()" (nameChange)="setNewTimerName($event)" (startChange)="setNewTimerStart($event)"
+      (endChange)="setNewTimerEnd($event)" (intervalValueChange)="setNewTimerValue($event)"
+      (intervalUnitChange)="setNewTimerUnit($event)" (weekDaysChange)="setTimerNewWeekdays($event)"
+      (activeChange)="setTimerNewActive($event)" (deviceSelected)="selectedDevice = $event"
+      (scenarioSelected)="selectedScenary = $event" (create)="createTimer()"></app-add-timer-modal>
+
+    <!-- Consumption history modal (componente filho) -->
+    <app-consumption-history-modal [open]="viewHistoryOpen()" [history]="consumptionHistory()"
+      (close)="closeViewHistory()"></app-consumption-history-modal>
+
+    <!-- Advanced Analysis modal (componente filho) -->
+    <app-advanced-analysis-modal [open]="advancedAnalysisOpen()"
+      (close)="closeAdvancedAnalysis()"></app-advanced-analysis-modal>
+
+    <!-- Automations modal (componente filho) -->
+    <app-automations-modal [open]="automationsOpen()" [automations]="automations()" [showList]="mode() === 'basic'"
+      (close)="closeAutomations()"
+      (nameChange)="setNewAutomationName($event)" (startChange)="setNewAutomationStart($event)"
+      (endChange)="setNewAutomationEnd($event)" (intervalValueChange)="setNewIntervalValue($event)"
+      (intervalUnitChange)="setNewIntervalUnit($event)" (activeChange)="setNewAutomationActive($event)"
+      (create)="createAutomation()"></app-automations-modal>
+
+    <!--<app-automation-targets-modal *ngIf="targetsOpen()" [automationId]="selectedAutomationId()!"
+      [devices]="basicDevices" [scenaries]="scenarios" (close)="closeTargetPopupForce()"
+      (created)="onCreateTarget($event)"></app-automation-targets-modal>-->
+
+    <!-- Settings card -->
+    <app-settings-card [open]="settingsOpen()" [user]="modalUser()" (close)="closeSettings()">
+    </app-settings-card>
+
+  </div>
+
+  <!-- Add Scenario modal (componente filho) -->
+  <app-add-scenario-modal [open]="addScenarioOpen()" [availableDevices]="availableDevicesForScenario()"
+    [selectedDeviceIds]="newScenarioDevices()" (close)="closeAddScenario()" (nameChange)="setNewScenarioName($event)"
+    (toggleDevice)="toggleScenarioDevice($event)" (create)="createScenario()"></app-add-scenario-modal>
+
+  <!-- Remove Scenario modal (componente filho) -->
+  <app-remove-scenario-modal [open]="removeScenarioOpen()" [count]="selectedScenarioNames().size + selectedAdvancedScenarioIds().size"
+    (close)="closeRemoveScenario()" (confirm)="confirmRemoveScenario()"></app-remove-scenario-modal>
+
+  <!-- Remove Automation modal (componente filho) -->
+  <app-remove-automation-modal [open]="removeAutomationOpen()" [count]="selectedAdvancedAutomationIds().size"
+    (close)="closeRemoveAutomation()" (confirm)="confirmRemoveAutomation()"></app-remove-automation-modal>
+
+  <!-- Eco mode restart confirmation modal -->
+  <app-restart-device-modal
+    [open]="ecoRestartOpen()"
+    [busy]="ecoRestartBusy()"
+    [count]="ecoRestartIps().length"
+    [ips]="ecoRestartIps()"
+    [targetMode]="ecoRestartTargetMode()"
+    (cancel)="cancelEcoRestart()"
+    (confirm)="confirmEcoRestart()"
+  ></app-restart-device-modal>
+
+</div>
+
+<ng-template #loginRedirect>
+  <p>{{ translate.t('goToLogin') }}</p>
+</ng-template>

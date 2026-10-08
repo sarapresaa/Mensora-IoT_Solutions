@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header">
+    <div>
+      <p class="eyebrow">{{ translate.t('energyManagement')}}</p>
+      <h2>{{ translate.t('changeConsumption')}}</h2>
+    </div>
+    <button class="secondary rgb-hover" type="button" (click)="openHistory.emit()">{{ translate.t('seeConsumption')}}</button>
+  </div>
+  <div class="stack">
+    <div class="current-mode-indicator" 
+         [ngClass]="selectedEnergyMode === 'balanced' ? 'normal-mode' : 'saving-mode'" 
+         *ngIf="ecoModeSupported()">
+      <span class="status-text">
+        Modo atual: <strong>{{ selectedEnergyMode === 'balanced' ? 'Normal' : 'Poupança de Energia' }}</strong>
+      </span>
+    </div>
+    <button
+      type="button"
+      class="stack-item toggle-button"
+      (click)="toggleEnergyMode()"
+      [disabled]="!ecoModeSupported()"
+      [class.disabled]="!ecoModeSupported()"
+    >
+      <span *ngIf="ecoModeSupported()">{{ currentModeText() }}</span>
+      <span *ngIf="!ecoModeSupported()">Nenhum dispositivo Shelly conectado</span>
+    </button>
+  </div>
+</div>

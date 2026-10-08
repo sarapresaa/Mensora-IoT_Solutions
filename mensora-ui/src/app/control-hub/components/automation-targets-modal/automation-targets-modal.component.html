@@ -1,0 +1,70 @@
+<div class="tutorial-overlay">
+  <div class="tutorial-card">
+    <div class="tutorial-header">
+      <div>
+        <h3>{{ translate.t('addTarget') }}</h3>
+        <p class="tutorial-description">
+          {{ translate.t('chooseDeviceForAuto') }}
+        </p>
+      </div>
+      <div>
+        <button class="ghost" type="button" (click)="close.emit()">{{ translate.t('close') }}</button>
+      </div>
+    </div>
+
+    <div style="padding: 12px; color: white;">
+
+      <label style="display:block; margin-bottom:8px;">{{ translate.t('targetType') }}</label>
+      <select style="width:100%; padding:8px; border-radius:8px;"
+        [(ngModel)]="selectedType">
+        <option [ngValue]="null" disabled selected>{{ translate.t('chooseType') }}</option>
+        <option value="device">{{ translate.t('device') }}</option>
+        <option value="scenary">{{ translate.t('scenario') }}</option>
+      </select>
+
+      <div *ngIf="selectedType === 'device'" style="margin-top:16px;">
+        <label>{{ translate.t('chooseDevice') }}</label>
+        <div style="max-height:180px; overflow:auto; margin-top:8px; border-radius:6px;">
+          <div *ngFor="let d of devices" (click)="selectedDeviceId = d.device_id"
+            [style.background]="selectedDeviceId === d.device_id ? '#1c2130' : 'transparent'" style="padding:10px; border-bottom:1px solid #222; cursor:pointer;">
+            <strong>{{ d.name }}</strong>
+            <br>
+            {{ translate.t('state') }}{{ d.state }}
+          </div>
+          <div *ngIf="devices.length === 0" style="padding:10px;">
+            {{ translate.t('noDeviceAvailable') }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedType === 'scenary'" style="margin-top:16px;">
+        <label>{{ translate.t('chooseScenario') }}</label>
+        <div style="max-height:180px; overflow:auto; margin-top:8px; border-radius:6px;">
+          <div *ngFor="let s of scenaries" (click)="selectedScenaryId = s.id"
+            [style.background]="selectedScenaryId === s.id ? '#1c2130' : 'transparent'" style="padding:10px; cursor:pointer;">
+            <strong>{{ s.name }}</strong>
+            <br>
+            {{ translate.t('state') }}{{ s.state }}
+          </div>
+          <div *ngIf="scenaries.length === 0" style="padding:10px;">
+            {{ translate.t('noScenarioAvailable') }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tutorial-footer" style="display:flex; justify-content:flex-end; padding:12px; gap:8px;">
+      <button class="ghost" type="button" (click)="close.emit()">Cancelar</button>
+      <button class="primary" type="button"
+        [disabled]="
+          selectedType === undefined ||
+          (selectedType === 'device' && !selectedDeviceId) ||
+          (selectedType === 'scenary' && !selectedScenaryId)
+        "
+        (click)="created.emit({ type: selectedType, deviceId: selectedDeviceId, scenaryId: selectedScenaryId })"
+      >
+        {{ translate.t('createTarget') }}
+      </button>
+    </div>
+  </div>
+</div>
+

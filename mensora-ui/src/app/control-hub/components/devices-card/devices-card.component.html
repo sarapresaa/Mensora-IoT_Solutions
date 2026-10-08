@@ -1,0 +1,76 @@
+<div class="card devices-card-fixed-height">
+  <div class="card-header">
+    <p class="eyebrow">{{ translate.t('manageDevices') }}</p>
+    <button class="secondary rgb-hover" type="button" (click)="openAdd.emit()">{{ translate.t('add') }}</button>
+  </div>
+  <div class="stack">
+    <div
+      *ngFor="let device of devices"
+      class="stack-item"
+      (click)="selectDevice.emit(device.device_id)"
+      [ngClass]="{ 'selected': selectedIds?.has(device.device_id!) }"
+    >
+      <div style="display:flex;align-items:center;gap:12px;width:100%;">
+        <div style="display:flex;flex-direction:column;flex:1;min-width:0;">
+          <p class="item-title" style="margin:0">{{ device.name }}</p>
+          
+          <!-- Boxes de métricas em lugar da descrição -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:8px;margin-top:8px;margin-bottom:8px;">
+            <!-- Voltagem -->
+            <div *ngIf="device.voltage !== undefined && device.voltage !== null && device.voltage !== 0" style="background:rgba(100,150,255,0.15);padding:6px;border-radius:6px;border-left:3px solid #6496ff;text-align:center;">
+              <p style="margin:0;font-size:0.75rem;color:#999;font-weight:600;">{{ translate.t('voltage') }}</p>
+              <p style="margin:0;font-size:0.9rem;color:#fff;font-weight:600;">{{ device.voltage | number:'1.1-1' }}V</p>
+            </div>
+            
+            <!-- Corrente -->
+            <div *ngIf="device.current !== undefined && device.current !== null && device.current !== 0" style="background:rgba(100,200,150,0.15);padding:6px;border-radius:6px;border-left:3px solid #64c896;text-align:center;">
+              <p style="margin:0;font-size:0.75rem;color:#999;font-weight:600;">{{ translate.t('current') }}</p>
+              <p style="margin:0;font-size:0.9rem;color:#fff;font-weight:600;">{{ device.current | number:'1.1-2' }}A</p>
+            </div>
+            
+            <!-- Consumo Power (Watts) -->
+            <div *ngIf="device.current_consumption !== undefined && device.current_consumption !== null && device.current_consumption !== 0" style="background:rgba(255,150,100,0.15);padding:6px;border-radius:6px;border-left:3px solid #ff9664;text-align:center;">
+              <p style="margin:0;font-size:0.75rem;color:#999;font-weight:600;">{{ translate.t('power') }}</p>
+              <p style="margin:0;font-size:0.9rem;color:#fff;font-weight:600;">{{ device.current_consumption | number:'1.1-2' }}W</p>
+            </div>
+            
+            <!-- Consumo Total Energy -->
+            <div *ngIf="device.total_consumption !== undefined && device.total_consumption !== null && device.total_consumption !== 0" style="background:rgba(200,100,255,0.15);padding:6px;border-radius:6px;border-left:3px solid #c864ff;text-align:center;">
+              <p style="margin:0;font-size:0.75rem;color:#999;font-weight:600;">{{ translate.t('energy') }}</p>
+              <p style="margin:0;font-size:0.9rem;color:#fff;font-weight:600;">{{ device.total_consumption / 1000 | number:'1.1-2' }}kWh</p>
+            </div>
+          </div>
+        </div>
+        
+        <button
+          *ngIf="selectedIds && device.device_id && selectedIds.size === 1 && selectedIds.has(device.device_id)"
+          class="icon-btn"
+          type="button"
+          title="Editar"
+          (click)="$event.stopPropagation(); openEdit.emit()"
+          style="margin-left:4px;vertical-align:middle;padding:6px;border-radius:6px;background:rgba(0,0,0,0.4);flex-shrink:0;"
+        >
+          <img src="/icons/pencil.svg" alt="Editar" style="width:18px;height:18px;display:inline-block;filter:invert(1);" />
+        </button>
+      </div>
+      <div>
+        <div
+          class="pill"
+          role="button"
+          tabindex="0"
+          [ngClass]="{ 'pill-on': device.state === 'on', 'pill-off': device.state === 'off' }"
+          (click)="toggleDevice.emit(device.device_id); $event.stopPropagation()"
+          (keydown.enter)="toggleDevice.emit(device.device_id); $event.stopPropagation()"
+        >
+          {{ device.state === 'on' ? 'On' : 'Off' }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    
+    <button class="secondary" *ngIf="selectedIds && selectedIds.size > 0" type="button" (click)="openRemove.emit()">
+      {{ translate.t('remove') }} {{ selectedIds && selectedIds.size > 1 ? ' (' + selectedIds.size + ')' : '' }}
+    </button>
+  </div>
+</div>

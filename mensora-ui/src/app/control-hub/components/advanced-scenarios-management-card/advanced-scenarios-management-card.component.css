@@ -1,0 +1,103 @@
+/* Reutiliza classes globais do control-hub */
+
+.stack {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.scenario-container {
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 16px;
+  transition: border-color 0.3s ease;
+}
+
+/* Cenário ativo - border verde neon */
+.scenario-container.active {
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* Cenário inativo - border cinzento */
+.scenario-container.inactive {
+  border: 2px solid #9ca3af;
+  box-shadow: none;
+}
+
+/* Cenário selecionado */
+.scenario-container.selected {
+  background: linear-gradient(135deg, var(--scenarioSelected-background1), var(--scenarioSelected-background2));
+  border-color: var(--scenarioSelected-border);
+}
+
+.scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.devices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.device-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: var(--stackItem-background);
+  border: 1px solid var(--stackItem-border);
+  border-radius: 4px;
+}
+
+.device-name {
+  font-size: 14px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}

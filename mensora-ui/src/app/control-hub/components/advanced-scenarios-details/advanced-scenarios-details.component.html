@@ -1,0 +1,37 @@
+<div class="scenarios-container">
+  <div *ngFor="let scenario of scenarios" class="scenario-detail">
+    <div class="scenario-header" (click)="toggleScenario(scenario.id)">
+      <div class="header-content">
+        <span class="toggle-icon">{{ isExpanded(scenario.id) ? '▼' : '▶' }}</span>
+        <h3>{{ scenario.name }}</h3>
+        <span class="device-count">{{ scenario.devices?.length || 0 }} {{ translate.t('devices') }}</span>
+      </div>
+      <span class="pill" [ngClass]="'state-' + scenario.state">{{ scenario.state }}</span>
+    </div>
+
+    <div *ngIf="isExpanded(scenario.id)" class="scenario-devices">
+      <div *ngIf="!scenario.devices || scenario.devices.length === 0" class="no-devices">
+        {{ translate.t('noDevices') }}
+      </div>
+
+      <div *ngFor="let device of scenario.devices" class="device-item">
+        <div class="device-info">
+          <span class="device-icon">{{ getDeviceIcon(device.device_type) }}</span>
+          <div class="device-details">
+            <p class="device-name">{{ device.device_name }}</p>
+            <p class="device-type">{{ device.device_type }}</p>
+          </div>
+        </div>
+
+        <button
+          class="toggle-btn"
+          [ngClass]="{ 'state-on': device.device_state, 'state-off': !device.device_state }"
+          [disabled]="isLoadingDevice(device.device_id)"
+          (click)="toggleDevice(scenario.id, device)"
+        >
+          {{ device.device_state ? 'ON' : 'OFF' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

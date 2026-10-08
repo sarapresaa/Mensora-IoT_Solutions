@@ -1,0 +1,57 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="brand-icon" (click)="toggleDarkMode()">⚡</div>
+      <h1>Mensora</h1>
+      <p class="subtitle">Smart IoT Hub</p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email"
+          [placeholder]="translate.t('examplePlaceHolder')" required>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">{{ translate.t('password') }}</label>
+
+        <div class="password-wrapper">
+          <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="password" name="password"
+            placeholder="••••••••" required>
+
+          <button type="button" class="toggle-password" (click)="togglePassword()" aria-label="Mostrar/Ocultar senha">
+            <i class="fa-solid" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+          <span>{{ translate.t('rememberMe') }}</span>
+        </label>
+        <a href="#" class="forgot-link">{{ translate.t('forgottenPass') }}</a>
+      </div>
+
+      <button type="submit" class="btn-primary">{{ translate.t('enter') }}</button>
+    </form>
+
+    <div class="login-footer">
+      <p>{{ translate.t('noAccount') }} <a routerLink="/register">{{ translate.t('createAccount') }}</a></p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" [class.show]="showToast" [class.toast-success]="toastType === 'success'"
+    [class.toast-error]="toastType === 'error'" [class.toast-warning]="toastType === 'warning'">
+    <div class="toast-icon">
+      <i class="fa-solid" [ngClass]="{
+        'fa-circle-check': toastType === 'success',
+        'fa-circle-exclamation': toastType === 'error',
+        'fa-triangle-exclamation': toastType === 'warning'
+      }"></i>
+    </div>
+    <span class="toast-message">{{ toastMessage }}</span>
+  </div>
+</div>

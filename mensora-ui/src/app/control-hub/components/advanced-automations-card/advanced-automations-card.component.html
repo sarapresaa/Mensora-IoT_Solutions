@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header">
+    <p class="eyebrow">{{ translate.t('automations') }}</p>
+  </div>
+  <div class="stack">
+    <div *ngFor="let a of automations" class="stack-item">
+      <div>
+        <p class="item-title">{{ a.automation_name || translate.t('automation') }}</p>
+        <p class="item-subtitle">{{ a.start_time || '-' }} → {{ a.end_time || '-' }}</p>
+        <p class="item-repetition" *ngIf="getRepetitionInfo(a)">{{ getRepetitionInfo(a) }}</p>
+      </div>
+      <span class="pill" [ngClass]="{ 'pill-on': a.active, 'pill-off': !a.active }" 
+      (click)="toggleAutomation.emit({ id: a.automation_id, active: !a.active }); $event.stopPropagation()">{{ a.active ? translate.t('active') : translate.t('inactive') }}</span>
+    </div>
+    <div *ngIf="automations.length === 0" class="stack-item">{{ translate.t('noAutomations') }}</div>
+  </div>
+</div>

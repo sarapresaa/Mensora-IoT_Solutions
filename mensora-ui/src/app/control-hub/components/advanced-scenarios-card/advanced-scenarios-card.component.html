@@ -1,0 +1,34 @@
+<div class="card span-2">
+  <div class="card-header">
+    <div>
+      <p class="eyebrow">{{ translate.t('controlByScenario') }}</p>
+      <h2>{{ translate.t('configVariousScenarios') }}</h2>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="secondary" type="button" (click)="openAdd.emit()">{{ translate.t('addScenario') }}</button>
+      <button
+        class="secondary"
+        type="button"
+        (click)="openRemove.emit()"
+        [class.hidden]="!selectedNames || selectedNames.size === 0"
+      >
+        {{ translate.t('remove') }}{{ selectedNames && selectedNames.size > 1 ? ' (' + selectedNames.size + ')' : '' }}
+      </button>
+    </div>
+  </div>
+  <div class="scenario-grid">
+    <div
+      *ngFor="let scenario of scenarios"
+      class="scenario"
+      (click)="selectScenario.emit(scenario.name)"
+      [ngClass]="{ 'selected': selectedNames?.has(scenario.name) }"
+      style="cursor:pointer"
+    >
+      <div>
+        <p class="item-title">{{ scenario.name }}</p>
+        <p class="item-subtitle">{{ scenario.devices }}</p>
+      </div>
+      <span class="pill" [ngClass]="scenario.stateClass">{{ scenario.state }}</span>
+    </div>
+  </div>
+</div>

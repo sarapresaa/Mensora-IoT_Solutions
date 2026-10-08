@@ -1,0 +1,70 @@
+<div class="card">
+  <div class="card-header">
+    <h2>{{ user.user_id ? 'Update User' : 'Create New User' }}</h2>
+  </div>
+
+  <div class="card-content">
+    <form #userForm="ngForm" (ngSubmit)="user.user_id ? updateUser(userForm) : createUser(userForm)">
+      <div class="form-row">
+        <input type="text" name="username" placeholder="Username" [(ngModel)]="user.username" required>
+        <input type="email" name="user_email" placeholder="Email" [(ngModel)]="user.user_email" required>
+        <input type="password" name="user_password" placeholder="Password" [(ngModel)]="user.user_password" required>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Preferred Language
+          <select name="preferred_language" [(ngModel)]="user.preferred_language">
+            <option value="pt-PT">Portuguese</option>
+            <option value="en_US">English</option>
+          </select>
+        </label>
+        <label>
+          Interface Mode
+          <select name="interface_mode" [(ngModel)]="user.interface_mode">
+            <option value="simple">Simple</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">{{ user.user_id ? 'Update User' : 'Create User' }}</button>
+        <button type="button" (click)="newUser()">Clear</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Users</h2>
+  </div>
+
+  <div class="card-content">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let col of displayedColumns">{{ col }}</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let element of dataSource">
+          <td>{{ element.user_id }}</td>
+          <td>{{ element.username }}</td>
+          <td>{{ element.user_email }}</td>
+          <td>{{ element.user_password }}</td>
+          <td>{{ element.register_date }}</td>
+          <td>{{ element.preferred_language }}</td>
+          <td>{{ element.interface_mode }}</td>
+          <td>{{ element.user_admin }}</td>
+          <td>
+            <button (click)="selectUser(element)">Edit</button>
+            <button (click)="deleteUser(element.user_id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

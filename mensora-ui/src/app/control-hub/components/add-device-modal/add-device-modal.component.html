@@ -1,0 +1,54 @@
+<ng-container *ngIf="open">
+  <div class="tutorial-overlay">
+    <div class="tutorial-card">
+      <div class="tutorial-header modal-header-with-close">
+        <div>
+          <h3>{{ translate.t('addDevice') }}</h3>
+          <p class="tutorial-description">{{ translate.t('tutorialDescription') }}</p>
+        </div>
+        <button class="close-btn" type="button" (click)="close.emit()">✕</button>
+      </div>
+
+      <div class="tutorial-footer">
+        <!-- Campos principais -->
+        <div style="width:100%">
+          <label>{{ translate.t('newDeviceName') }}</label>
+          <input type="text" [value]="newDeviceName" (input)="newDeviceNameChange.emit($any($event.target).value)" />
+
+          <label>{{ translate.t('newDeviceStatus') }}</label>
+          <input type="text" [value]="newDeviceStatus"
+            (input)="newDeviceStatusChange.emit($any($event.target).value)" />
+
+          <label>{{ translate.t('newDeviceIp') }}</label>
+          <input type="text" [value]="newDeviceIp" (input)="newDeviceIpChange.emit($any($event.target).value)" />
+        </div>
+
+        <!-- mDNS section -->
+        <div style="width:100%;margin-top:12px">
+          <p class="eyebrow">{{ translate.t('mDnsEyebrow') }}</p>
+          <div *ngIf="discoveredDevices.length === 0" class="empty">{{ translate.t('noMDnsDevice') }}</div>
+          <div *ngFor="let s of discoveredDevices" class="list-item">
+            <div class="list-item-main">
+              <div class="list-title">{{ s.name || s.host }}</div>
+              <div class="list-subtitle">{{ (s.addresses && s.addresses[0]) || '-' }} — {{ s.type || (s.txt &&
+                (s.txt.model || '')) }}</div>
+            </div>
+            <div class="list-actions">
+              <button class="secondary" type="button"
+                (click)="testShelly.emit((s.addresses && s.addresses[0]) || '')">{{ translate.t('test') }}</button>
+              <button class="primary" type="button" (click)="addDiscoveredDevice.emit(s)">{{ translate.t('add')
+                }}</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="tutorial-actions">
+          <span *ngIf="addDeviceError" class="error">{{ addDeviceError }}</span>
+          <span *ngIf="!addDeviceError && deviceCheckStatus" class="status">{{ deviceCheckStatus }}</span>
+          <button class="primary" type="button" *ngIf="newDeviceIp?.trim() && newDeviceName?.trim()" (click)="addDevice.emit()">{{ translate.t('add') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
